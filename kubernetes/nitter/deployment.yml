@@ -1,0 +1,38 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: nitter
+  name: nitter
+  namespace: nitter
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nitter
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: nitter
+    spec:
+      containers:
+      - image: docker.io/michaeltrip/nitter:latest
+        imagePullPolicy: Always
+        name: nitter
+        ports:
+          - containerPort: 8080
+        volumeMounts:
+        - name: config-volume
+          mountPath: /src/nitter.conf
+          subPath: nitter.conf
+      volumes:
+        - name: config-volume
+          configMap:
+            name: nitter-config
+
+
+
