@@ -9,9 +9,9 @@ RUN apk update \
 	pcre \
 	unzip \
 	git \
-&&  mkdir -p /build
+&&  mkdir -p /src
 
-WORKDIR /build
+WORKDIR /src/
 
 RUN set -ex \
 &&  git clone $REPO . \
