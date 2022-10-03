@@ -42,7 +42,7 @@ jobs:
           context: ./
           file: ./Dockerfile
           push: true
-          tags: epenguincom/nitter:latest, epenguincom/nitter:build-${{ env.timestamp }}
+          tags: michaeltrip/nitter:latest, michaeltrip/nitter:build-${{ env.timestamp }}
           platforms: arm64,amd64
 
 
