@@ -28,8 +28,8 @@ LABEL maintainer="michael@alcatrash.org"
 
 WORKDIR /build/
 RUN apk --no-cache add pcre ca-certificates
-COPY --from=build /build/nitter/nitter ./
-COPY --from=build /build/nitter/nitter.example.conf ./nitter.conf
-COPY --from=build /build/nitter/public ./public
+COPY --from=build /build/nitter ./
+COPY --from=build /build/nitter.example.conf ./nitter.conf
+COPY --from=build /build/public ./public
 EXPOSE 8080
 CMD ./nitter
