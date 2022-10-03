@@ -9,9 +9,9 @@ RUN apk update \
 	pcre \
 	unzip \
 	git \
-&&  mkdir -p /src
+&&  mkdir -p /build
 
-WORKDIR /src/
+WORKDIR /build/
 
 RUN set -ex \
 &&  git clone $REPO . \
@@ -26,10 +26,10 @@ RUN set -ex \
 FROM alpine:latest
 LABEL maintainer="michael@alcatrash.org"
 
-WORKDIR /src/
+WORKDIR /build/
 RUN apk --no-cache add pcre ca-certificates
-COPY --from=build /src/nitter/nitter ./
-COPY --from=build /src/nitter/nitter.example.conf ./nitter.conf
-COPY --from=build /src/nitter/public ./public
+COPY --from=build /build/nitter/nitter ./
+COPY --from=build /build/nitter/nitter.example.conf ./nitter.conf
+COPY --from=build /build/nitter/public ./public
 EXPOSE 8080
 CMD ./nitter
