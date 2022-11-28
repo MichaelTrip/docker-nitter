@@ -1,4 +1,4 @@
-FROM ghcr.io/maxisoft/nim-docker-images/nim:v1.6.10_runtime as build
+FROM ghcr.io/maxisoft/nim-docker-images/nim:v1.6.10 as build
 
 ARG  REPO=https://github.com/zedeus/nitter.git
 
