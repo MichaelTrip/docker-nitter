@@ -1,4 +1,4 @@
-FROM ghcr.io/maxisoft/nim-docker-images/nim:v1.6.10 as build
+FROM docker.io/alpine:3.17 as build
 
 ARG  REPO=https://github.com/zedeus/nitter.git
 
@@ -9,21 +9,24 @@ RUN apk update \
 	pcre \
 	unzip \
 	git \
+        gcc \
+	nim \
+	nimble \
+	libgcc \
+	curl \
+	libc-dev \
 &&  mkdir -p /build
 
 WORKDIR /build/
 
-RUN set -ex \
-&&  git clone $REPO . \
-&&  nimble install -y --depsOnly \
-&&  nimble build -y -d:release --passC:"-flto" --passL:"-flto" \
-&&  strip -s nitter \
-&&  nimble scss \
-&&  nimble md
-
+RUN git clone $REPO .
+RUN nimble install -y --depsOnly
+RUN nimble build -d:danger -d:lto -d:strip \
+    && nimble scss \
+    && nimble md
 # ---------------------------------------------------------------------
 
-FROM alpine:latest
+FROM docker.io/alpine:3.17
 LABEL maintainer="michael@alcatrash.org"
 
 WORKDIR /build/
