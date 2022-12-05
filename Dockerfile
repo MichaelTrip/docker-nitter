@@ -1,7 +1,7 @@
 FROM docker.io/alpine:3.17 as build
 
-ARG  REPO=https://github.com/zedeus/nitter.git
-
+#ARG  REPO=https://github.com/zedeus/nitter.git
+ARG REPO=https://github.com/MichaelTrip/nitter.git
 RUN apk update \
 &&  apk add libsass-dev \
         libffi-dev \
