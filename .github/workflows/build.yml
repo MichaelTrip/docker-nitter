@@ -43,7 +43,7 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: michaeltrip/nitter:latest, michaeltrip/nitter:build-${{ env.timestamp }}
-          platforms: arm64,amd64
+          platforms: aarch64
 
 
       - name: Image digest
