@@ -9,12 +9,14 @@ RUN apk update \
 	pcre \
 	unzip \
 	git \
-        gcc \
+  gcc \
 	nim \
 	nimble \
 	libgcc \
 	curl \
 	libc-dev \
+  libcrypto1.1 \
+  libcrypto3 \
 &&  mkdir -p /build
 
 WORKDIR /build/
