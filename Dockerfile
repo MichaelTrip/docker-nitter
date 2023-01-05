@@ -15,6 +15,7 @@ RUN apk update \
 	curl \
 	libgcc \
 	libc-dev \
+	build-base \
 &&  mkdir -p /build
 
 WORKDIR /build/
