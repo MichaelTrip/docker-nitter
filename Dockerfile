@@ -1,7 +1,7 @@
 FROM alpine:latest as build
 
-ARG  REPO=https://github.com/michaeltrip/nitter.git
-
+# ARG  REPO=https://github.com/michaeltrip/nitter.git
+ARG REPO=https://github.com/zedeus/nitter.git
 RUN apk update \
 &&  apk add libsass-dev \
         libffi-dev \
