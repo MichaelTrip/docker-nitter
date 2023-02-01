@@ -1,7 +1,7 @@
-FROM docker.io/alpine:3.17 as build
+FROM alpine:latest as build
 
-#ARG  REPO=https://github.com/zedeus/nitter.git
-ARG REPO=https://github.com/MichaelTrip/nitter.git
+# ARG  REPO=https://github.com/michaeltrip/nitter.git
+ARG REPO=https://github.com/zedeus/nitter.git
 RUN apk update \
 &&  apk add libsass-dev \
         libffi-dev \
@@ -9,30 +9,33 @@ RUN apk update \
 	pcre \
 	unzip \
 	git \
-  gcc \
 	nim \
 	nimble \
-	libgcc \
+	pcre \
 	curl \
+	libgcc \
 	libc-dev \
-  libcrypto1.1 \
-  libcrypto3 \
+	build-base \
 &&  mkdir -p /build
 
 WORKDIR /build/
 
-RUN git clone $REPO .
-RUN nimble install -y --depsOnly
-RUN nimble build -d:danger -d:lto -d:strip \
-    && nimble scss \
-    && nimble md
+RUN set -ex \
+&&  git clone $REPO . \
+&&  nimble install -y --depsOnly \
+#&&  nimble build -y -d:release --passC:"-flto" --passL:"-flto" \
+&&  nimble build -d:danger -d:lto -d:strip \
+&&  strip -s nitter \
+&&  nimble scss \
+&&  nimble md
+
 # ---------------------------------------------------------------------
 
-FROM docker.io/alpine:3.17
+FROM alpine:latest
 LABEL maintainer="michael@alcatrash.org"
 
 WORKDIR /build/
-RUN apk --no-cache add pcre ca-certificates
+RUN apk --no-cache add pcre ca-certificates openssl-dev
 COPY --from=build /build/nitter ./
 COPY --from=build /build/nitter.example.conf ./nitter.conf
 COPY --from=build /build/public ./public
