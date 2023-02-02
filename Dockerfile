@@ -12,7 +12,7 @@ USER root
 RUN apk --no-cache add pcre ca-certificates openssl-dev
 COPY --from=build /usr/local/bin/nitter /data
 COPY --from=build /dist/nitter.example.conf /data
-COPY --from=build /dist/public/ /data/
+COPY --from=build /dist/public /data/public
 
 RUN set -eux \
 &&  (getent group www-data || addgroup -g 82 www-data) \
