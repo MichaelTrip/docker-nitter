@@ -2,14 +2,14 @@ name: Build develop build
 
 on:
   push:
-    branches:    
+    branches:
       - '*'         # matches every branch that doesn't contain a '/'
       - '*/*'       # matches every branch containing a single '/'
       - '**'        # matches every branch
       - '!master'   # excludes master
       - '!develop'
       - '!main'
- 
+
 jobs:
   docker:
     runs-on: ubuntu-latest
@@ -39,7 +39,10 @@ jobs:
           context: ./
           file: ./Dockerfile
           push: true
-          tags: michaeltrip/nitter:${{ env.GITHUB_SHA }},michaeltrip/nitter:build-${{ env.timestamp }},michaeltrip/nitter:dev-build-${{ env.timestamp }}
+          tags: |
+            michaeltrip/nitter:${{ env.GITHUB_SHA }}
+            michaeltrip/nitter:build-${{ env.timestamp }}
+            michaeltrip/nitter:dev-build-${{ env.timestamp }}
           platforms: linux/amd64,linux/arm64/v8
 
 
