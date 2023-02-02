@@ -9,7 +9,7 @@ LABEL maintainer="michael@alcatrash.org"
 RUN mkdir -p /data
 WORKDIR /data
 USER root
-RUN echo -e "http://nl.alpinelinux.org/alpine/v3.16/main\nhttp://nl.alpinelinux.org/alpine/v3.16/community" > /etc/apk/repositories
+# RUN echo -e "http://nl.alpinelinux.org/alpine/v3.16/main\nhttp://nl.alpinelinux.org/alpine/v3.16/community" > /etc/apk/repositories
 RUN set -eux \
 &&  (getent group www-data || addgroup -g 82 www-data) \
 &&  (getent passwd www-data || adduser -u 82 -G www-data -h / -D www-data) \
