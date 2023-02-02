@@ -1,4 +1,4 @@
-name: Build
+name: Build on master
 
 on:
   push:
@@ -42,8 +42,8 @@ jobs:
           context: ./
           file: ./Dockerfile
           push: true
-          tags: michaeltrip/nitter:latest, michaeltrip/nitter:build-${{ env.timestamp }}
-          platforms: aarch64
+          tags: michaeltrip/nitter:latest,michaeltrip/nitter:build-${{ env.timestamp }}
+          platforms: linux/amd64,linux/arm64/v8
 
 
       - name: Image digest

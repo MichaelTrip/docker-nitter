@@ -1,43 +1,27 @@
-FROM alpine:latest as build
+FROM quay.io/unixfox/nitter:latest as build
 
-# ARG  REPO=https://github.com/michaeltrip/nitter.git
-ARG REPO=https://github.com/zedeus/nitter.git
-RUN apk update \
-&&  apk add libsass-dev \
-        libffi-dev \
-	openssl-dev \
-	pcre \
-	unzip \
-	git \
-	nim \
-	nimble \
-	pcre \
-	curl \
-	libgcc \
-	libc-dev \
-	build-base \
-&&  mkdir -p /build
-
-WORKDIR /build/
-
-RUN set -ex \
-&&  git clone $REPO . \
-&&  nimble install -y --depsOnly \
-&&  nimble build -y -d:release --passC:"-flto" --passL:"-flto" \
-#&&  nimble build -d:danger -d:lto -d:strip \
-&&  strip -s nitter \
-&&  nimble scss \
-&&  nimble md
-
-# ---------------------------------------------------------------------
-
-FROM alpine:latest
+FROM alpine:3.16
 LABEL maintainer="michael@alcatrash.org"
 
-WORKDIR /build/
+
+
+
+RUN mkdir -p /data
+WORKDIR /data
+USER root
 RUN apk --no-cache add pcre ca-certificates openssl-dev
-COPY --from=build /build/nitter ./
-COPY --from=build /build/nitter.example.conf ./nitter.conf
-COPY --from=build /build/public ./public
+COPY --from=build /usr/local/bin/nitter /data
+COPY --from=build /dist/nitter.example.conf /data
+COPY --from=build /dist/public /data/public
+
+RUN set -eux \
+&&  (getent group www-data || addgroup -g 82 www-data) \
+&&  (getent passwd www-data || adduser -u 82 -G www-data -h /data -D www-data) \
+&&  apk add --no-cache curl pcre \
+&&  chown root:root /data/nitter \
+&&  chmod 0555 /data/nitter \
+&&  chown -R www-data:www-data /data
+
+USER www-data
 EXPOSE 8080
 CMD ./nitter
