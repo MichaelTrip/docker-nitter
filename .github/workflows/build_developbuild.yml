@@ -40,7 +40,7 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: |
-            michaeltrip/nitter:${{ env.GITHUB_SHA }}
+            michaeltrip/nitter:${{ github.sha }}
             michaeltrip/nitter:build-${{ env.timestamp }}
             michaeltrip/nitter:dev-build-${{ env.timestamp }}
           platforms: linux/amd64,linux/arm64/v8
