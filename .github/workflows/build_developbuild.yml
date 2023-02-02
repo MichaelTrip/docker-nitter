@@ -2,10 +2,13 @@ name: Build develop build
 
 on:
   push:
-    branches-ignore:
-      - master
-      - develop
-      - main
+    branches:    
+      - '*'         # matches every branch that doesn't contain a '/'
+      - '*/*'       # matches every branch containing a single '/'
+      - '**'        # matches every branch
+      - '!master'   # excludes master
+      - '!develop'
+      - '!main'
  
 jobs:
   docker:
