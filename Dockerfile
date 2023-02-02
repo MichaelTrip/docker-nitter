@@ -23,8 +23,8 @@ WORKDIR /build/
 RUN set -ex \
 &&  git clone $REPO . \
 &&  nimble install -y --depsOnly \
-#&&  nimble build -y -d:release --passC:"-flto" --passL:"-flto" \
-&&  nimble build -d:danger -d:lto -d:strip \
+&&  nimble build -y -d:release --passC:"-flto" --passL:"-flto" \
+#&&  nimble build -d:danger -d:lto -d:strip \
 &&  strip -s nitter \
 &&  nimble scss \
 &&  nimble md
