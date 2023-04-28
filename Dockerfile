@@ -1,27 +1,23 @@
-FROM quay.io/unixfox/nitter:latest as build
+FROM alpine:3.17 as nim
+LABEL maintainer="setenforce@protonmail.com"
 
-FROM alpine:3.16
-LABEL maintainer="michael@alcatrash.org"
+RUN apk --no-cache add gcc git libc-dev libsass-dev "nim=1.6.8-r0" nimble pcre
 
+WORKDIR /src/nitter
 
+COPY nitter.nimble .
+RUN nimble install -y --depsOnly
 
+COPY . .
+RUN nimble build -d:danger -d:lto -d:strip \
+    && nimble scss \
+    && nimble md
 
-RUN mkdir -p /data
-WORKDIR /data
-USER root
-RUN apk --no-cache add pcre ca-certificates openssl-dev
-COPY --from=build /usr/local/bin/nitter /data
-COPY --from=build /dist/nitter.example.conf /data
-COPY --from=build /dist/public /data/public
-
-RUN set -eux \
-&&  (getent group www-data || addgroup -g 82 www-data) \
-&&  (getent passwd www-data || adduser -u 82 -G www-data -h /data -D www-data) \
-&&  apk add --no-cache curl pcre \
-&&  chown root:root /data/nitter \
-&&  chmod 0555 /data/nitter \
-&&  chown -R www-data:www-data /data
-
-USER www-data
+FROM alpine:3.17
+WORKDIR /src/
+RUN apk --no-cache add ca-certificates pcre openssl1.1-compat
+COPY --from=nim /src/nitter/nitter ./
+COPY --from=nim /src/nitter/nitter.example.conf ./nitter.conf
+COPY --from=nim /src/nitter/public ./public
 EXPOSE 8080
 CMD ./nitter
